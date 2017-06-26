@@ -19,35 +19,49 @@ public class QuoteController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<ArrayList<Quote>> getAllQuotes(){
-        //Quote quote = new Quote("Wu Tang Clan!!!");
+
         ArrayList<Quote> quotes = new ArrayList<>();
+
         quoteRepository.findAll().forEach(quotes::add);
+
         return new ResponseEntity<>(quotes, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}", method RequestMethod.GET)
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getQuote(@PathVariable("id") int id){
         Quote quote = quoteRepository.findOne(id);
+
         if(quote == null) {
+
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+
         return new ResponseEntity<Quote>(quote, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}", method RequestMethod.DELETE)
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteQuote(@PathVariable("id") int id){
+
         if(!quoteRepository.exists(id)){
+
             return new ResponseEntity(HttpStatus.NOT_FOUND);
+
         }else{
+
             quoteRepository.delete(id);
         }
+
         return new ResponseEntity<Quote>(HttpStatus.NO_CONTENT);
     }
 
+
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> updateQuote(@RequestBody Quote quote){
+        quoteRepository.save(quote);
 
-        
+        return new ResponseEntity<Quote>(HttpStatus.CREATED);
     }
 
 }
